@@ -14,19 +14,18 @@ const Display = ({value, text}) => (
 
 const Average = ({good, neutral, bad}) => {
   const sum = good + neutral + bad
-  if (sum === 0) return <div>average 0 </div>
   const avg = (good - bad) / sum
   return <div>average {avg}</div>
 }
 
 const Positive = ({good, neutral, bad}) => {
   const sum = good + neutral + bad
-  if (sum === 0) return <div>positive 0 %</div>
   const pos = good / sum
   return <div>positive {pos} %</div>
 }
 
 const Statistics = ({good, neutral, bad}) => {
+  if (good === 0 && neutral === 0 && bad === 0) return <div>No feedback given</div>
   return (
     <div>
       <Display value={good} text="good" />
