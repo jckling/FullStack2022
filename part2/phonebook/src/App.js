@@ -18,11 +18,6 @@ const App = () => {
       })
   }, [])
 
-  const handleNameChange = (event) => {
-    console.log(event.target.value)
-    setNewName(event.target.value)
-  }
-
   const addPerson = (event) => {
     event.preventDefault()
 
@@ -44,6 +39,21 @@ const App = () => {
           setNewNumber('')
         })
     }
+  }
+
+  const delPerson = (person) => {
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService
+        .remove(person.id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+    }
+  }
+
+  const handleNameChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
@@ -69,7 +79,7 @@ const App = () => {
         newNumber={newNumber} handleNumberChange={handleNumberChange}
       />
       <h3>Numbers</h3>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} delPerson={delPerson}/>
     </div>
   )
 }
