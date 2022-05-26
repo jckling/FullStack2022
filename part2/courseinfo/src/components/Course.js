@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Header = ({name}) => <h1>{name}</h1>
+const Header = ({name}) => <h2>{name}</h2>
 
 const Content = ({part}) => <p>{part.name} {part.exercises}</p>
 
