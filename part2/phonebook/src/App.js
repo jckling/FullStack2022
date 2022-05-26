@@ -9,12 +9,14 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [id, setId] = useState(0)
 
   useEffect(() => {
     personService
       .getAll()
       .then(initialPersons => {
         setPersons(initialPersons)
+        setId(initialPersons.length + 1)
       })
   }, [])
 
@@ -22,13 +24,25 @@ const App = () => {
     event.preventDefault()
 
     if (persons.some(person => newName === person.name)) {
-      window.alert(`${newName} is already added to phonebook`)
+      const person = persons.find(p => p.name === newName)
+      if (person.number === newNumber) window.alert(`${newName} is already added to phonebook`)
+      else if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const changedPerson = { ...person, number: newNumber }
+        
+        personService
+          .update(person.id, changedPerson)
+          .then(returnPerson => {
+            setPersons(persons.map(p => p.id !== person.id ? p : returnPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
     }
     else {
       const personObject = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1,
+        id: id,
       }
 
       personService
@@ -37,6 +51,7 @@ const App = () => {
           setPersons(persons.concat(returnPerson))
           setNewName('')
           setNewNumber('')
+          setId(id + 1)
         })
     }
   }
