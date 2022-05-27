@@ -3,7 +3,12 @@ const baseUrl = 'http://localhost:3001/persons'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+  const nonExisting = {
+    name: 'Haze',
+    number: '123-456-789',
+    id: 1000,
+  }
+  return request.then(response => response.data.concat(nonExisting))
 }
 
 const create = newObject => {
@@ -18,4 +23,6 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, remove, update }
+const exportedObject = { getAll, create, remove, update }
+
+export default exportedObject

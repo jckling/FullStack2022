@@ -12,6 +12,7 @@ const App = () => {
   const [filterName, setFilterName] = useState('')
   const [id, setId] = useState(0)
   const [message, setMessage] = useState(null)
+  const [type, setType] = useState("success")
 
   useEffect(() => {
     personService
@@ -41,6 +42,16 @@ const App = () => {
             setTimeout(() => {
               setMessage(null)
             }, 5000)
+          })
+          .catch(error => {
+          console.log(`Error: ${error}`)
+          setPersons(persons.filter(p => p.id !== person.id))
+            setMessage(`Information of ${newName} has already been removed from server`)
+            setType("error")
+            setTimeout(() => {
+              setMessage(null)
+              setType("success")
+            }, 8000)
           })
       }
     }
@@ -73,6 +84,16 @@ const App = () => {
         .then(() => {
           setPersons(persons.filter(p => p.id !== person.id))
         })
+        .catch(error => {
+          console.log(`Error: ${error}`)
+          setPersons(persons.filter(p => p.id !== person.id))
+          setMessage(`Information of ${newName} has already been removed from server`)
+          setType("error")
+          setTimeout(() => {
+            setMessage(null)
+            setType("success")
+          }, 8000)
+        })
     }
   }
 
@@ -96,7 +117,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} type={type}/>
       <Filter filterName={filterName} handleFilterNameChange={handleFilterNameChange} />
       <h3>Add a new</h3>
       <PersonForm
