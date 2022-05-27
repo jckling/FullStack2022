@@ -8,6 +8,7 @@ JavaScript 阅读材料
 - [Mozilla's JavaScript Guide](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)
 - [重新介绍 JavaScript（JS 教程）](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
 - [getify/You-Dont-Know-JS](https://github.com/getify/You-Dont-Know-JS)
+- [Functional programming in JavaScript](https://youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84)
 
 React 阅读材料
 - [React 官方文档](https://zh-hans.reactjs.org/docs/getting-started.html)
