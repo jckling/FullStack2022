@@ -12,6 +12,9 @@ const log = morgan(':method :url :status :res[content-length] - :response-time m
 
 app.use(log)
 
+require('dotenv').config()
+const Person = require('./models/person')
+
 let persons = [
   { 
     "id": 1,
@@ -46,7 +49,9 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person.find({}).then(result => {
+    res.json(result)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
