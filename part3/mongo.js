@@ -4,7 +4,11 @@ const url =`mongodb://127.0.0.1:27017/phonebook`
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
   number: String,
 })
 
@@ -31,6 +35,9 @@ else if (process.argv.length == 4) {
   person.save().then(result => {
     console.log(`added ${name} number ${number} to phonebook`)
     mongoose.connection.close()
+  })
+  .catch(error => {
+    console.log(error.message)
   })
 }
 else {
