@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const url =`mongodb://127.0.0.1:27017/phonebook`
+const url = 'mongodb://127.0.0.1:27017/phonebook'
 
 mongoose.connect(url)
 
@@ -14,7 +14,7 @@ const personSchema = new mongoose.Schema({
     minLength: 8,
     validate: {
       validator: function(v) {
-        return /^\d{2,3}-\d+/.test(v);
+        return /^\d{2,3}-\d+/.test(v)
       },
     },
     required: true
@@ -23,16 +23,16 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-if (process.argv.length == 2) {
+if (process.argv.length === 2) {
   Person.find({}).then(result => {
-    console.log("phonebook:")
+    console.log('phonebook:')
     result.forEach(people => {
-      console.log(people.name, " ", people.number)
+      console.log(people.name, ' ', people.number)
     })
     mongoose.connection.close()
   })
 }
-else if (process.argv.length == 4) {
+else if (process.argv.length === 4) {
   const name = process.argv[2]
   const number = process.argv[3]
 
@@ -40,14 +40,14 @@ else if (process.argv.length == 4) {
     name: `${name}`,
     number: `${number}`,
   })
-  
-  person.save().then(result => {
+
+  person.save().then(() => {
     console.log(`added ${name} number ${number} to phonebook`)
     mongoose.connection.close()
   })
-  .catch(error => {
-    console.log(error.message)
-  })
+    .catch(error => {
+      console.log(error.message)
+    })
 }
 else {
   console.log('Please provide name and number: node mongo.js <name> <number>')
