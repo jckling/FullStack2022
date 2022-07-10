@@ -36,7 +36,7 @@ describe('when there is initially some blogs saved', () => {
     expect(blog.likes).toBeDefined()
     expect(blog._id).toBeUndefined()
     expect(blog.__v).toBeUndefined()
-  });
+  })
 
   describe('addition of a new blog', () => {
     test('succeeds with valid data', async () => {
@@ -45,7 +45,7 @@ describe('when there is initially some blogs saved', () => {
         author: 'Helsinki',
         url: 'https://fullstackopen.com/',
         likes: 2022,
-      };
+      }
 
       await api
         .post('/api/blogs')
@@ -56,7 +56,7 @@ describe('when there is initially some blogs saved', () => {
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
-      const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title);
+      const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title)
       expect(addedBlog).toBeDefined();
     })
 
@@ -76,8 +76,7 @@ describe('when there is initially some blogs saved', () => {
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
-      const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title);
-      console.log(addedBlog)
+      const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title)
       expect(addedBlog).toBeDefined();
       if (addedBlog !== undefined) {
         expect(addedBlog).toEqual({
@@ -86,6 +85,21 @@ describe('when there is initially some blogs saved', () => {
           likes: 0
         })
       }
+    })
+
+    test('fails without title and url', async () => {
+      const newBlog = {
+        author: 'Helsinki',
+        likes: 2022
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
     })
   })
 })
