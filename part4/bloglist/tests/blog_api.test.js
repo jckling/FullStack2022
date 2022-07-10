@@ -117,6 +117,28 @@ describe('when there is initially some blogs saved', () => {
       expect(blogsAtEnd).not.toContainEqual(blogToDelete);
     })
   })
+
+describe('update of a blog', () => {
+  test('succeeds with valid data', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    const newBlog = {
+      ...blogToUpdate,
+      likes: 2222,
+    }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(newBlog)
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogsAtEnd).toContainEqual({ ...blogToUpdate, ...newBlog });
+  });
+});
+
 })
 
 afterAll(() => {
