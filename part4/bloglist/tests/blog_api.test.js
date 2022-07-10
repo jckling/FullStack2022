@@ -58,7 +58,34 @@ describe('when there is initially some blogs saved', () => {
 
       const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title);
       expect(addedBlog).toBeDefined();
+    })
 
+    test('succeeds without likes', async () => {
+      const newBlog = {
+        title: 'Fullstack 2022',
+        author: 'Helsinki',
+        url: 'https://fullstackopen.com/'
+      };
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+      const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title);
+      console.log(addedBlog)
+      expect(addedBlog).toBeDefined();
+      if (addedBlog !== undefined) {
+        expect(addedBlog).toEqual({
+          id: addedBlog.id,
+          ...newBlog,
+          likes: 0
+        })
+      }
     })
   })
 })
