@@ -1,89 +1,67 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+
+const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
+
 const Blog = require('../models/blog')
 
-const initialBlogs = [
-  {
-    _id: "5a422a851b54a676234d17f7",
-    title: "React patterns",
-    author: "Michael Chan",
-    url: "https://reactpatterns.com/",
-    likes: 7,
-    __v: 0
-  },
-  {
-    _id: "5a422aa71b54a676234d17f8",
-    title: "Go To Statement Considered Harmful",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-    likes: 5,
-    __v: 0
-  },
-  {
-    _id: "5a422b3a1b54a676234d17f9",
-    title: "Canonical string reduction",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-    likes: 12,
-    __v: 0
-  },
-  {
-    _id: "5a422b891b54a676234d17fa",
-    title: "First class tests",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-    likes: 10,
-    __v: 0
-  },
-  {
-    _id: "5a422ba71b54a676234d17fb",
-    title: "TDD harms architecture",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-    likes: 0,
-    __v: 0
-  },
-  {
-    _id: "5a422bc61b54a676234d17fc",
-    title: "Type wars",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-    likes: 2,
-    __v: 0
-  }  
-]
+describe('when there is initially some blogs saved', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlogs)
+  })
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
-  await Blog.insertMany(initialBlogs)
+  test('blogs are returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('all blogs are returned', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('a blog has specific properties', async () => {
+    const response = await api.get('/api/blogs')
+    const blog = response.body[0]
+
+    expect(blog.id).toBeDefined()
+    expect(blog.title).toBeDefined()
+    expect(blog.author).toBeDefined()
+    expect(blog.url).toBeDefined()
+    expect(blog.likes).toBeDefined()
+    expect(blog._id).toBeUndefined()
+    expect(blog.__v).toBeUndefined()
+  });
+
+  describe('addition of a new blog', () => {
+    test('succeeds with valid data', async () => {
+      const newBlog = {
+        title: 'Fullstack 2022',
+        author: 'Helsinki',
+        url: 'https://fullstackopen.com/',
+        likes: 2022,
+      };
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+      const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title);
+      expect(addedBlog).toBeDefined();
+
+    })
+  })
 })
-
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-})
-
-test('there is only one blog', async () => {
-  const response = await api.get('/api/blogs')
-  expect(response.body).toHaveLength(6)
-})
-
-test('a blog has specific properties', async () => {
-  const response = await api.get('/api/blogs')
-  const blog = response.body[0]
-
-  expect(blog.id).toBeDefined()
-  expect(blog.title).toBeDefined()
-  expect(blog.author).toBeDefined()
-  expect(blog.url).toBeDefined()
-  expect(blog.likes).toBeDefined()
-  expect(blog._id).toBeUndefined()
-  expect(blog.__v).toBeUndefined()
-});
 
 afterAll(() => {
   mongoose.connection.close()
