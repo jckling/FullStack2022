@@ -28,3 +28,9 @@ Content-Type: application/json
     "username": "root",
     "password": "wrongpassword"
 }
+
+###
+
+DELETE http://localhost:3003/api/blogs/62cabdb9525d0dfa43d1df5a
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYyY2FiZDgzNGFkODU2NzU1ZjJiMWU1NiIsImlhdCI6MTY1NzQ1OTU5MiwiZXhwIjoxNjU3NDYzMTkyfQ.RmgnrsAQdy_kKyyRYKGQb-iBWy8RJYiRC0_IuzlPhEw
