@@ -19,10 +19,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   }
 
   const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes,
+    ...body,
     user: user._id
   })
 
@@ -46,7 +43,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
   }
 })
 
-blogsRouter.put('/:id', (request, response, next) => {
+blogsRouter.put('/:id', middleware.userExtractor, async (request, response, next) => {
   Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
     .then(updatedBlog => {
       response.json(updatedBlog)

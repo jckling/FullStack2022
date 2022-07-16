@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYyY2FiZDgzNGFkODU2NzU1ZjJiMWU1NiIsImlhdCI6MTY1NzQ2MTMxMCwiZXhwIjoxNjU3NDY0OTEwfQ.pM2abONP_KiYlh3t1hjA2bP2GQwGOAdEu0jIAYNG3p8
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYyY2FiZDgzNGFkODU2NzU1ZjJiMWU1NiIsImlhdCI6MTY1Nzk4NDk3NywiZXhwIjoxNjU3OTg4NTc3fQ.4t8HsaEjmxKR5ltcGRjAh0OGA-a1zWOuHAiJR5G5K98
 
 {
     "title": "VS Code REST client is pretty good",
@@ -32,6 +32,6 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3003/api/blogs/62cada50b630643b428635b7
+DELETE http://localhost:3003/api/blogs/62d2d7e553567fac0ab0e5b0
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYyY2FiZDgzNGFkODU2NzU1ZjJiMWU1NiIsImlhdCI6MTY1NzQ2MTMxMCwiZXhwIjoxNjU3NDY0OTEwfQ.pM2abONP_KiYlh3t1hjA2bP2GQwGOAdEu0jIAYNG3p8
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYyY2FiZDgzNGFkODU2NzU1ZjJiMWU1NiIsImlhdCI6MTY1Nzk4NDk3NywiZXhwIjoxNjU3OTg4NTc3fQ.4t8HsaEjmxKR5ltcGRjAh0OGA-a1zWOuHAiJR5G5K98
