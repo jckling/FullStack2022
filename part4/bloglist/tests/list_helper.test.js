@@ -9,9 +9,9 @@ test('dummy returns one', () => {
 
 describe('total likes', () => {
   test('when list has no blog, equals zero', () => {
-    const result = listHelper.totalLikes([]);
-    expect(result).toBe(0);
-  });
+    const result = listHelper.totalLikes([])
+    expect(result).toBe(0)
+  })
 
   const listWithOneBlog = [
     {
@@ -41,38 +41,38 @@ describe('favorite blog', () => {
   const blogs = testHelper.initialBlogs
 
   const favorite = {
-    title: "Canonical string reduction",
-    author: "Edsger W. Dijkstra",
+    title: 'Canonical string reduction',
+    author: 'Edsger W. Dijkstra',
     likes: 12
   }
 
   test('when list has no blog, equals undefined', () => {
-    const result = listHelper.favoriteBlog([]);
-    expect(result).toBeUndefined();
-  });
+    const result = listHelper.favoriteBlog([])
+    expect(result).toBeUndefined()
+  })
 
   test('favorite blog', () => {
-    const result = listHelper.favoriteBlog(blogs);
-    expect(result).toEqual(favorite);
-  });
+    const result = listHelper.favoriteBlog(blogs)
+    expect(result).toEqual(favorite)
+  })
 })
 
 describe('most blogs', () => {
   const blogs = testHelper.initialBlogs
 
   const most = {
-    author: "Robert C. Martin",
+    author: 'Robert C. Martin',
     blogs: 3
   }
 
   test('when list has no blog, equals undefined', () => {
-    const result = listHelper.mostBlogs([]);
-    expect(result).toBeUndefined();
+    const result = listHelper.mostBlogs([])
+    expect(result).toBeUndefined()
   })
-  
+
   test('most blogs', () => {
-    const result = listHelper.mostBlogs(blogs);
-    expect(result).toEqual(most);
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual(most)
   })
 })
 
@@ -80,7 +80,7 @@ describe('most likes', () => {
   const blogs = testHelper.initialBlogs
 
   const most = {
-    author: "Edsger W. Dijkstra",
+    author: 'Edsger W. Dijkstra',
     likes: 17
   }
 
@@ -88,7 +88,7 @@ describe('most likes', () => {
     const result = listHelper.mostLikes([])
     expect(result).toBeUndefined()
   })
-  
+
   test('most likes', () => {
     const result = listHelper.mostLikes(blogs)
     expect(result).toEqual(most)

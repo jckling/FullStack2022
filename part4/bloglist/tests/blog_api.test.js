@@ -46,7 +46,7 @@ describe('when there is initially some blogs saved', () => {
         url: 'https://fullstackopen.com/',
         likes: 2022,
       }
-      
+
       const token = await helper.loginUser()
       await api
         .post('/api/blogs')
@@ -59,7 +59,7 @@ describe('when there is initially some blogs saved', () => {
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
       const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title)
-      expect(addedBlog).toBeDefined();
+      expect(addedBlog).toBeDefined()
     })
 
     test('succeeds without likes', async () => {
@@ -67,8 +67,8 @@ describe('when there is initially some blogs saved', () => {
         title: 'Fullstack 2022',
         author: 'Helsinki',
         url: 'https://fullstackopen.com/'
-      };
-      
+      }
+
       const token = await helper.loginUser()
       await api
         .post('/api/blogs')
@@ -81,13 +81,13 @@ describe('when there is initially some blogs saved', () => {
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
       const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title)
-      expect(addedBlog).toBeDefined();
+      expect(addedBlog).toBeDefined()
       if (addedBlog !== undefined) {
         expect(addedBlog).toEqual({
           id: addedBlog.id,
           ...newBlog,
           likes: 0,
-          user: mongoose.Types.ObjectId("62cabd834ad856755f2b1e56")
+          user: mongoose.Types.ObjectId('62cabd834ad856755f2b1e56')
         })
       }
     })
@@ -97,7 +97,7 @@ describe('when there is initially some blogs saved', () => {
         author: 'Helsinki',
         likes: 2022
       }
-      
+
       const token = await helper.loginUser()
       await api
         .post('/api/blogs')
@@ -123,7 +123,7 @@ describe('when there is initially some blogs saved', () => {
 
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
-      expect(blogsAtEnd).not.toContainEqual(blogToDelete);
+      expect(blogsAtEnd).not.toContainEqual(blogToDelete)
     })
   })
 
