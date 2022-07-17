@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -45,7 +47,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setErrorMessage('wrong username or password')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -74,6 +76,15 @@ const App = () => {
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
       })
+    
+    setTitle('');
+    setAuthor('');
+    setUrl('');
+
+    setSuccessMessage(`A new blog "${blogObject.title}" by ${blogObject.author} added.`);
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
   }
 
   const loginForm = () => (
@@ -131,25 +142,29 @@ const App = () => {
     </div>
   )
 
+  if (user === null) {
+    return (
+      <div>
+        <Notification message={errorMessage?errorMessage:successMessage} type={errorMessage?'error':'success'} />
+        {loginForm()}
+      </div>
+    )
+  }
   return (
     <div>
-      {user === null ?
-        loginForm() :
-        <div>
-          <h2>blogs</h2>
-          <p>
-            {user.name} logged in
-            <button onClick={handleLogout}>logout</button>
-          </p>
-          <h2>create new</h2>
+      <h2>blogs</h2>
+      <Notification message={errorMessage?errorMessage:successMessage} type={errorMessage?'error':'success'} />
+      <p>
+        {user.name} logged in
+        <button onClick={handleLogout}>logout</button>
+      </p>
+      <h2>create new</h2>
 
-          {blogForm()}
+      {blogForm()}
 
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
-          )}
-        </div>
-      }
+      {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} />
+      )}
     </div>
   )
 }
