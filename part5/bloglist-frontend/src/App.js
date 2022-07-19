@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -9,10 +10,6 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
-
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
 
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
@@ -64,23 +61,12 @@ const App = () => {
     }, 5000)
   }
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
-
+  const addBlog = (blogObject) => {
     blogService
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
       })
-    
-    setTitle('');
-    setAuthor('');
-    setUrl('');
 
     setSuccessMessage(`A new blog "${blogObject.title}" by ${blogObject.author} added.`);
     setTimeout(() => {
@@ -115,34 +101,6 @@ const App = () => {
     </div>     
   )
 
-  const blogForm = () => (
-    <div>
-      <form onSubmit={addBlog}>
-        <div>
-          title: <input
-            value={title}
-            onChange={ ({target}) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author:
-          <input
-            value={author}
-            onChange={ ({target}) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url:
-          <input
-            value={url}
-            onChange={ ({target}) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>  
-    </div>
-  )
-
   const blogFormRef = useRef()
 
   if (user === null) {
@@ -164,7 +122,7 @@ const App = () => {
       <h2>create new</h2>
 
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        {blogForm()}
+        <BlogForm createBlog={addBlog} />
       </Togglable>
       
       
