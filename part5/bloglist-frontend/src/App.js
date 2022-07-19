@@ -91,7 +91,19 @@ const App = () => {
         )
       })
 
-    setSuccessMessage(`Like "${blogObject.title}" by ${blogObject.author}.`)
+    setSuccessMessage(`Like ${blogObject.title} by ${blogObject.author}.`)
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
+  }
+
+  const removeBlog = (blogObject) => {
+    setBlogs(
+      blogs
+        .filter(blog => blog.id !== blogObject.id)
+        .sort((a, b) => b.likes - a.likes)
+    )
+    setSuccessMessage(`Removed ${blogObject.title} by ${blogObject.author}.`)
     setTimeout(() => {
       setSuccessMessage(null)
     }, 5000)
@@ -149,7 +161,7 @@ const App = () => {
       </Togglable>
       
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={addBlogLike}/>
+        <Blog key={blog.id} blog={blog} updateBlog={addBlogLike} removeBlog={removeBlog} user={user}/>
       )}
     </div>
   )
