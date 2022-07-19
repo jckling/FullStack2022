@@ -16,9 +16,12 @@ const App = () => {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    blogService
+      .getAll()
+      .then(blogs => {
+        blogs.sort((a, b) => b.likes - a.likes)
+        setBlogs(blogs)
+      })
   }, [])
 
   useEffect(() => {
@@ -65,10 +68,13 @@ const App = () => {
     blogService
       .create(blogObject)
       .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
+        setBlogs(blogs
+          .concat(returnedBlog)
+          .sort((a, b) => b.likes - a.likes)
+        )
       })
 
-    setSuccessMessage(`A new blog "${blogObject.title}" by ${blogObject.author} added.`);
+    setSuccessMessage(`A new blog "${blogObject.title}" by ${blogObject.author} added.`)
     setTimeout(() => {
       setSuccessMessage(null)
     }, 5000)
@@ -79,11 +85,13 @@ const App = () => {
       .update(blogObject)
       .then(returnedBlog => {
         setBlogs(
-          blogs.map(blog => blog.id !== returnedBlog.id ? blog : returnedBlog)
+          blogs
+            .map(blog => blog.id !== returnedBlog.id ? blog : returnedBlog)
+            .sort((a, b) => b.likes - a.likes)
         )
       })
 
-    setSuccessMessage(`Like "${blogObject.title}" by ${blogObject.author}.`);
+    setSuccessMessage(`Like "${blogObject.title}" by ${blogObject.author}.`)
     setTimeout(() => {
       setSuccessMessage(null)
     }, 5000)
