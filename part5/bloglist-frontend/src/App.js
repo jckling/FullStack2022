@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -142,6 +143,8 @@ const App = () => {
     </div>
   )
 
+  const blogFormRef = useRef()
+
   if (user === null) {
     return (
       <div>
@@ -160,7 +163,11 @@ const App = () => {
       </p>
       <h2>create new</h2>
 
-      {blogForm()}
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+        {blogForm()}
+      </Togglable>
+      
+      
 
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
