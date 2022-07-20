@@ -5,6 +5,8 @@ import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 let component
+const updateMockHandler = jest.fn()
+const removeMockHandler = jest.fn()
 
 beforeEach(() => {
   const user = {
@@ -22,8 +24,7 @@ beforeEach(() => {
     user: user
   }
 
-  const mockHandler = jest.fn()
-  component = render(<Blog blog={blog} updateBlog={mockHandler} removeBlog={mockHandler} user={user}/>)
+  component = render(<Blog blog={blog} updateBlog={updateMockHandler} removeBlog={removeMockHandler} user={user}/>)
 })
 
 test('renders content', () => {
@@ -44,4 +45,12 @@ test('clicking the button shows the url and likes', async () => {
   expect(detail).not.toHaveStyle({ display: 'none' })
   expect(detail).toHaveTextContent('http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html')
   expect(detail).toHaveTextContent('2')
+})
+
+test('clicking the button twice calls event handler twice', async () => {
+  const eventUser = userEvent.setup()
+  const button = component.getByText('like')
+  await eventUser.click(button)
+  await eventUser.click(button)
+  expect(updateMockHandler.mock.calls).toHaveLength(2)
 })
