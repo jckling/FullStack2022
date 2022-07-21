@@ -47,5 +47,23 @@ describe('Blog app', function() {
       cy.get('#create-button').click()
       cy.contains(`A new blog "Jckling's Blog" by Jckling added.`)
     })
+
+    describe('and some blogs exists', function () {
+      beforeEach(function () {
+        cy.createBlog({ title: 'first blog', author: "Jckling", url: "https://jckling.github.io/" })
+        cy.createBlog({ title: 'second blog', author: "Jckling", url: "https://jckling.github.io/" })
+        cy.createBlog({ title: 'third blog', author: "Jckling", url: "https://jckling.github.io/" })
+      })
+
+      it('blog can be liked', function () {
+        cy.contains('second blog')
+          .contains('view')
+          .click()
+
+        cy.contains('second blog').parent().contains('0')
+        cy.contains('second blog').parent().contains('like').click()
+        cy.contains('second blog').parent().contains('1')
+      })
+    })
   })
 })
