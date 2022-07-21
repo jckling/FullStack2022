@@ -50,9 +50,9 @@ describe('Blog app', function() {
 
     describe('and some blogs exists', function () {
       beforeEach(function () {
-        cy.createBlog({ title: 'first blog', author: "Jckling", url: "https://jckling.github.io/" })
-        cy.createBlog({ title: 'second blog', author: "Jckling", url: "https://jckling.github.io/" })
-        cy.createBlog({ title: 'third blog', author: "Jckling", url: "https://jckling.github.io/" })
+        cy.createBlog({ title: 'first blog', author: "Jckling", url: "https://jckling.github.io/", likes: 1 })
+        cy.createBlog({ title: 'second blog', author: "Jckling", url: "https://jckling.github.io/", likes: 2 })
+        cy.createBlog({ title: 'third blog', author: "Jckling", url: "https://jckling.github.io/", likes: 3 })
       })
 
       it('blog can be liked', function () {
@@ -60,9 +60,9 @@ describe('Blog app', function() {
           .contains('view')
           .click()
 
-        cy.contains('second blog').parent().contains('0')
+        cy.contains('second blog').parent().contains('2')
         cy.contains('second blog').parent().contains('like').click()
-        cy.contains('second blog').parent().contains('1')
+        cy.contains('second blog').parent().contains('3')
       })
 
       it('blog can be deleted by creator', function () {
@@ -96,6 +96,12 @@ describe('Blog app', function() {
         cy.contains('second blog').parent().contains('remove').should('be.not.visible')
         cy.contains('second blog').parent().contains('remove').click()
         cy.contains('401')
+      })
+
+      it('blogs are ordered by likes in desc', function () {
+        cy.get('.blog-container').eq(0).should('contain', 'third blog')
+        cy.get('.blog-container').eq(1).should('contain', 'second blog')
+        cy.get('.blog-container').eq(2).should('contain', 'first blog')
       })
     })
   })
