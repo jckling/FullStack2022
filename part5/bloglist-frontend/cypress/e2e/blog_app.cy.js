@@ -64,6 +64,39 @@ describe('Blog app', function() {
         cy.contains('second blog').parent().contains('like').click()
         cy.contains('second blog').parent().contains('1')
       })
+
+      it('blog can be deleted by creator', function () {
+        const user = {
+          name: 'root',
+          username: 'root',
+          password: 'sekret'
+        }
+        cy.login(user)
+
+        cy.contains('second blog')
+          .contains('view')
+          .click()
+        
+        cy.contains('second blog').parent().contains('remove').click()
+        cy.contains('Removed second blog by Jckling.')
+      })
+
+      it('blog can not be deleted by other users', function () {
+        const user = {
+          name: 'user',
+          username: 'user',
+          password: 'password'
+        }
+        cy.login(user)
+
+        cy.contains('second blog')
+          .contains('view')
+          .click()
+        
+        cy.contains('second blog').parent().contains('remove').should('be.not.visible')
+        cy.contains('second blog').parent().contains('remove').click()
+        cy.contains('401')
+      })
     })
   })
 })
