@@ -11,12 +11,14 @@ export const useField = (type) => {
     setValue('')
   }
 
-  return {
-    type,
-    value,
-    onChange,
+  return [
+    {
+      type,
+      value,
+      onChange
+    },
     reset
-  }
+  ]
 }
 
 // modules can have several named exports
