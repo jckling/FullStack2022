@@ -9,14 +9,13 @@ const totalLikes = (blogs) => {
     return sum + blog.likes
   }
 
-  return blogs.length === 0
-    ? 0
-    : blogs.reduce(reducer, 0)
+  return blogs.length === 0 ? 0 : blogs.reduce(reducer, 0)
 }
 
 const favoriteBlog = (blogs) => {
-  const imax = blogs.length === 0 ? 0 : Math.max(...blogs.map(blog => blog.likes))
-  const blog = blogs.find(blog => blog.likes === imax)
+  const imax =
+    blogs.length === 0 ? 0 : Math.max(...blogs.map((blog) => blog.likes))
+  const blog = blogs.find((blog) => blog.likes === imax)
   if (blog === undefined) return undefined
   return {
     title: blog.title,
@@ -27,8 +26,8 @@ const favoriteBlog = (blogs) => {
 
 const mostBlogs = (blogs) => {
   if (blogs.length === 0) return undefined
-  const groups = _.countBy(blogs.map(blog => blog.author))
-  const author = _.maxBy(_.keys(groups), o => groups[o])
+  const groups = _.countBy(blogs.map((blog) => blog.author))
+  const author = _.maxBy(_.keys(groups), (o) => groups[o])
   return {
     author: author,
     blogs: groups[author],
@@ -53,5 +52,5 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
-  mostLikes
+  mostLikes,
 }

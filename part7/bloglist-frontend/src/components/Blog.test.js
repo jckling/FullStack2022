@@ -12,7 +12,7 @@ beforeEach(() => {
   const user = {
     id: '62cabd834ad856755f2b1e56',
     username: 'root',
-    name: 'root'
+    name: 'root',
   }
 
   const blog = {
@@ -21,17 +21,24 @@ beforeEach(() => {
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     likes: 2,
-    user: user
+    user: user,
   }
 
-  component = render(<Blog blog={blog} updateBlog={updateBlog} removeBlog={removeBlog} user={user}/>)
+  component = render(
+    <Blog
+      blog={blog}
+      updateBlog={updateBlog}
+      removeBlog={removeBlog}
+      user={user}
+    />
+  )
 })
 
 test('renders content', () => {
   const div = component.container.querySelector('.blog')
   expect(div).toHaveTextContent('Type wars')
   expect(div).toHaveTextContent('Robert C. Martin')
-  
+
   const detail = component.container.querySelector('.detail')
   expect(detail).toHaveStyle({ display: 'none' })
 })
@@ -43,7 +50,9 @@ test('clicking the button shows the url and likes', async () => {
 
   const detail = component.container.querySelector('.detail')
   expect(detail).not.toHaveStyle({ display: 'none' })
-  expect(detail).toHaveTextContent('http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html')
+  expect(detail).toHaveTextContent(
+    'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html'
+  )
   expect(detail).toHaveTextContent('2')
 })
 

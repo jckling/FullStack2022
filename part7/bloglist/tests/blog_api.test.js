@@ -66,7 +66,7 @@ describe('when there is initially some blogs saved', () => {
       const newBlog = {
         title: 'Fullstack 2022',
         author: 'Helsinki',
-        url: 'https://fullstackopen.com/'
+        url: 'https://fullstackopen.com/',
       }
 
       const token = await helper.loginUser()
@@ -87,7 +87,7 @@ describe('when there is initially some blogs saved', () => {
           id: addedBlog.id,
           ...newBlog,
           likes: 0,
-          user: mongoose.Types.ObjectId('62cabd834ad856755f2b1e56')
+          user: mongoose.Types.ObjectId('62cabd834ad856755f2b1e56'),
         })
       }
     })
@@ -95,7 +95,7 @@ describe('when there is initially some blogs saved', () => {
     test('fails without title and url', async () => {
       const newBlog = {
         author: 'Helsinki',
-        likes: 2022
+        likes: 2022,
       }
 
       const token = await helper.loginUser()

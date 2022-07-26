@@ -58,7 +58,7 @@ describe('when there is initially some users at db', () => {
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
-      const usernames = usersAtEnd.map(u => u.username)
+      const usernames = usersAtEnd.map((u) => u.username)
       expect(usernames).toContain(newUser.username)
     })
 
@@ -98,7 +98,9 @@ describe('when there is initially some users at db', () => {
         .expect(400)
         .expect('Content-Type', /application\/json/)
 
-      expect(result.body.error).toContain('both username and password must have at least 3 characters')
+      expect(result.body.error).toContain(
+        'both username and password must have at least 3 characters'
+      )
 
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length)

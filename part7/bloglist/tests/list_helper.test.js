@@ -20,8 +20,8 @@ describe('total likes', () => {
       author: 'Edsger W. Dijkstra',
       url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
       likes: 5,
-      __v: 0
-    }
+      __v: 0,
+    },
   ]
 
   test('when list has only one blog, equals the likes of that', () => {
@@ -43,7 +43,7 @@ describe('favorite blog', () => {
   const favorite = {
     title: 'Canonical string reduction',
     author: 'Edsger W. Dijkstra',
-    likes: 12
+    likes: 12,
   }
 
   test('when list has no blog, equals undefined', () => {
@@ -62,7 +62,7 @@ describe('most blogs', () => {
 
   const most = {
     author: 'Robert C. Martin',
-    blogs: 3
+    blogs: 3,
   }
 
   test('when list has no blog, equals undefined', () => {
@@ -81,7 +81,7 @@ describe('most likes', () => {
 
   const most = {
     author: 'Edsger W. Dijkstra',
-    likes: 17
+    likes: 17,
   }
 
   test('when list has no blog, equals undefined', () => {
