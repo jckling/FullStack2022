@@ -52,17 +52,16 @@ const BlogList = (user) => {
   const like = (blog) => {
     dispatch(voteBlog(blog))
     dispatch(
-      setNotification(
-        `Like ${blogObject.title} by ${blogObject.author}.`,
-        'success',
-        5
-      )
+      setNotification(`Like ${blog.title} by ${blog.author}.`, 'success', 5)
     )
   }
 
   const remove = (blog) => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       dispatch(removeBlog(blog))
+      dispatch(
+        setNotification(`Remove ${blog.title} by ${blog.author}.`, 'success', 5)
+      )
     }
   }
 
@@ -73,8 +72,8 @@ const BlogList = (user) => {
           key={blog.id}
           blog={blog}
           user={user}
-          like={like}
-          remove={remove}
+          like={() => like(blog)}
+          remove={() => remove(blog)}
         />
       ))}
     </div>

@@ -5,6 +5,9 @@ const blogSlice = createSlice({
   name: 'blogs',
   initialState: [],
   reducers: {
+    initialize(state, action) {
+      return state.sort((a, b) => b.likes - a.likes)
+    },
     voteOf(state, action) {
       const votedBlog = action.payload
       const newState = state.map((blog) =>
@@ -30,6 +33,7 @@ export const initializeBlogs = () => {
   return async (dispatch) => {
     const blogs = await blogService.getAll()
     dispatch(setBlogs(blogs))
+    dispatch(initialize(blogs))
   }
 }
 
@@ -42,20 +46,22 @@ export const createBlog = (content) => {
 
 export const removeBlog = (content) => {
   return async (dispatch) => {
-    const removedBlog = await blogService.remove(content)
-    dispatch(removeBlog(removedBlog))
+    await blogService.remove(content)
+    dispatch(removeOf(content))
   }
 }
 
 export const voteBlog = (blog) => {
   return async (dispatch) => {
-    const votedBlog = await blogService.update(blog.id, {
+    const votedBlog = await blogService.update({
       ...blog,
-      votes: blog.votes + 1,
+      likes: blog.likes + 1,
+      user: blog.user.id,
     })
     dispatch(voteOf(votedBlog))
   }
 }
 
-export const { voteOf, appendBlog, setBlogs, removeOf } = blogSlice.actions
+export const { initialize, voteOf, appendBlog, setBlogs, removeOf } =
+  blogSlice.actions
 export default blogSlice.reducer
