@@ -5,11 +5,12 @@ import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
+  const dispatch = useDispatch()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -45,10 +46,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong username or password')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification('wrong username or password', 'error', 5))
     }
   }
 
@@ -56,9 +54,7 @@ const App = () => {
     event.preventDefault()
     setUser(null)
     window.localStorage.removeItem('loggedBlogAppUser')
-    setTimeout(() => {
-      setErrorMessage('log out timeout')
-    }, 5000)
+    dispatch(setNotification('logged out successfully', 'success', 5))
   }
 
   const addBlog = (blogObject) => {
@@ -66,12 +62,13 @@ const App = () => {
       setBlogs(blogs.concat(returnedBlog).sort((a, b) => b.likes - a.likes))
     })
 
-    setSuccessMessage(
-      `A new blog "${blogObject.title}" by ${blogObject.author} added.`
+    dispatch(
+      setNotification(
+        `A new blog "${blogObject.title}" by ${blogObject.author} added.`,
+        'success',
+        5
+      )
     )
-    setTimeout(() => {
-      setSuccessMessage(null)
-    }, 5000)
   }
 
   const addBlogLike = (blogObject) => {
@@ -83,10 +80,13 @@ const App = () => {
       )
     })
 
-    setSuccessMessage(`Like ${blogObject.title} by ${blogObject.author}.`)
-    setTimeout(() => {
-      setSuccessMessage(null)
-    }, 5000)
+    dispatch(
+      setNotification(
+        `Like ${blogObject.title} by ${blogObject.author}.`,
+        'success',
+        5
+      )
+    )
   }
 
   const removeBlog = (blogObject) => {
@@ -95,10 +95,14 @@ const App = () => {
         .filter((blog) => blog.id !== blogObject.id)
         .sort((a, b) => b.likes - a.likes)
     )
-    setSuccessMessage(`Removed ${blogObject.title} by ${blogObject.author}.`)
-    setTimeout(() => {
-      setSuccessMessage(null)
-    }, 5000)
+
+    dispatch(
+      setNotification(
+        `Removed ${blogObject.title} by ${blogObject.author}.`,
+        'success',
+        5
+      )
+    )
   }
 
   const loginForm = () => (
@@ -137,10 +141,7 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <Notification
-          message={errorMessage ? errorMessage : successMessage}
-          type={errorMessage ? 'error' : 'success'}
-        />
+        <Notification />
         {loginForm()}
       </div>
     )
@@ -148,10 +149,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification
-        message={errorMessage ? errorMessage : successMessage}
-        type={errorMessage ? 'error' : 'success'}
-      />
+      <Notification />
       <p>
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
