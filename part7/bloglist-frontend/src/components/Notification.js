@@ -6,9 +6,11 @@ const Notification = (props) => {
   const notification = props.notification.content
   const className = props.notification.className
 
-  return notification !== ''
-    ? <div className={className}>{notification}</div>
-    : <div></div>
+  return notification !== '' ? (
+    <div className={className}>{notification}</div>
+  ) : (
+    <div></div>
+  )
 }
 
 const mapStateToProps = (state) => {

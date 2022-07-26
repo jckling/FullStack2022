@@ -1,61 +1,39 @@
-import { useState } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ createBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
-  const addBlog = (event) => {
+const BlogForm = (props) => {
+  const addBlog = async (event) => {
     event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url,
+    const content = {
+      title: event.target.title.value,
+      author: event.target.author.value,
+      url: event.target.url.value,
     }
-
-    createBlog(blogObject)
-
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    props.createBlog(content)
   }
 
   return (
-    <div>
-      <form onSubmit={addBlog}>
-        <div>
-          title:{' '}
-          <input
-            id="title"
-            name="title"
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author:
-          <input
-            id="author"
-            name="author"
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url:
-          <input
-            id="url"
-            name="url"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button id="create-button" type="submit">
-          create
-        </button>
-      </form>
-    </div>
+    <form onSubmit={addBlog}>
+      <div>
+        title:
+        <input name="title" />
+      </div>
+      <div>
+        author:
+        <input name="author" />
+      </div>
+      <div>
+        url:
+        <input name="url" />
+      </div>
+      <button type="submit">create</button>
+    </form>
   )
 }
 
-export default BlogForm
+const mapDispatchToProps = {
+  createBlog,
+}
+
+export default connect(null, mapDispatchToProps)(BlogForm)
