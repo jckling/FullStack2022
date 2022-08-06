@@ -4,12 +4,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import { voteBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
-const Blog = ({ blog, user, like, remove }) => {
+const Blog = ({ blog, like, remove }) => {
   const [visible, setVisible] = useState(false)
+  const user = useSelector(state => state.user)
 
   const showWhenVisible = { display: visible ? '' : 'none' }
   const showRemove = {
-    display: blog.user.username === user.user.username ? '' : 'none',
+    display: blog.user.username === user.username ? '' : 'none',
   }
 
   const toggleVisibility = () => {
@@ -45,8 +46,8 @@ const Blog = ({ blog, user, like, remove }) => {
   )
 }
 
-const BlogList = (user) => {
-  const blogs = useSelector((state) => state.blogs)
+const BlogList = () => {
+  const blogs = useSelector(state => state.blogs)
   const dispatch = useDispatch()
 
   const like = (blog) => {
@@ -71,7 +72,6 @@ const BlogList = (user) => {
         <Blog
           key={blog.id}
           blog={blog}
-          user={user}
           like={() => like(blog)}
           remove={() => remove(blog)}
         />
