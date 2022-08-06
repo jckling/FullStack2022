@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, voteBlog } from './reducers/blogReducer'
+import { initializeBlogs, voteBlog, addComment } from './reducers/blogReducer'
 import { initializeUser, login, logout } from './reducers/userReducer'
 import { setNotification } from './reducers/notificationReducer'
 import BlogForm from './components/BlogForm'
@@ -73,6 +73,12 @@ const Blog = ({ blogs }) => {
     dispatch(setNotification(`Like ${blog.title} by ${blog.author}.`, 'success', 5))
   }
 
+  const comment = (event) => {
+    event.preventDefault()
+    const comment = event.target.comment.value
+    dispatch(addComment({blog, comment}))
+  }
+
   return (
     <div>
       <h2>{blog.title}</h2>
@@ -83,7 +89,11 @@ const Blog = ({ blogs }) => {
       </div>
       <div>added by <Link to={`/users/${blog.user.id}`}>{blog.user.username}</Link></div>
       <h3>comments</h3>
-      {/* {blog.comments.map(comment => <li>{comment}</li>)} */}
+      <form onSubmit={comment}>
+        <input name="comment" />
+        <button type="submit">add comment</button>
+      </form>
+      {blog.comments.map(comment => <li key={comment}>{comment}</li>)}
     </div>
   )
 }
@@ -198,10 +208,10 @@ const App = () => {
       </div>
 
       <Routes>
-        <Route path="/blogs" element={user ? <Blogs blogs={blogs}/> : <Navigate replace to="/login" />} />
-        <Route path="/blogs/:id" element={user ? <Blog blogs={blogs}/> : <Navigate replace to="/login" />} />
-        <Route path="/users" element={user ? <Users blogs={blogs}/> : <Navigate replace to="/login" />} />
-        <Route path="/users/:id" element={user ? <User blogs={blogs}/> : <Navigate replace to="/login" />} />
+        <Route path="/blogs" element={user ? <Blogs blogs={blogs} /> : <Navigate replace to="/login" />} />
+        <Route path="/blogs/:id" element={user ? <Blog blogs={blogs} /> : <Navigate replace to="/login" />} />
+        <Route path="/users" element={user ? <Users blogs={blogs} /> : <Navigate replace to="/login" />} />
+        <Route path="/users/:id" element={user ? <User blogs={blogs} /> : <Navigate replace to="/login" />} />
         <Route path="/login" element={user ? <Navigate replace to="/" /> : <Login />} />
         <Route path="/" element={user ? <Home /> : <Navigate replace to="/login" />} />
       </Routes>

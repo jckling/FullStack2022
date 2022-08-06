@@ -16,16 +16,28 @@ const blogSlice = createSlice({
       return newState.sort((a, b) => b.likes - a.likes)
     },
     appendBlog(state, action) {
-      state.push(action.payload)
+      const blog = action.payload
+      state.push({...blog, comments: []})
     },
     setBlogs(state, action) {
-      return action.payload
+      const blogs = action.payload
+      return blogs.map(blog => {return {...blog, comments: []}})
     },
     removeOf(state, action) {
       const removedBlog = action.payload
-      const newState = state.filter((blog) => blog.id !== removedBlog.id)
+      const newState = state.map(blog => blog.id !== removedBlog.id)
       return newState.sort((a, b) => b.likes - a.likes)
     },
+    addComment(state, action) {
+      const blog = action.payload.blog
+      const comment = action.payload.comment
+      const updatedBlog = {
+        ...blog,
+        comments: [...blog.comments, comment]
+      }
+      const newState = state.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog)
+      return newState.sort((a, b) => b.likes - a.likes)
+    }
   },
 })
 
@@ -62,6 +74,6 @@ export const voteBlog = (blog) => {
   }
 }
 
-export const { initialize, voteOf, appendBlog, setBlogs, removeOf } =
+export const { initialize, voteOf, appendBlog, setBlogs, removeOf, addComment } =
   blogSlice.actions
 export default blogSlice.reducer
