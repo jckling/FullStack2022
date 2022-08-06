@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs } from './reducers/blogReducer'
+import { initializeBlogs, voteBlog } from './reducers/blogReducer'
 import { initializeUser, login, logout } from './reducers/userReducer'
-import UserList from './components/UserList'
+import { setNotification } from './reducers/notificationReducer'
 import BlogForm from './components/BlogForm'
 
 import {
@@ -16,6 +16,16 @@ import {
   useNavigate,
   useMatch
 } from "react-router-dom"
+
+const _ = require('lodash')
+
+const Home = () => {
+  const user = useSelector(state => state.user)
+  const blogs = useSelector(state => state.blogs)
+
+  const filteredBlogs = blogs.filter(blog => blog.user.username === user.username)
+  return <Blogs blogs={filteredBlogs} />
+}
 
 const Login = () => {
   const navigate = useNavigate()
@@ -47,31 +57,40 @@ const Login = () => {
   )
 }
 
-const Blog = ({ blog }) => {
+const Blog = ({ blogs }) => {
+  const match = useMatch('/blogs/:id')
+  const blog = match
+    ? blogs.find(blog => blog.id === match.params.id)
+    : null
+
+  if(blog === undefined || blog === null) return null
+
   const dispatch = useDispatch()
 
-  const like = (blog) => {
+  const like = (event) => {
+    event.preventDefault()
     dispatch(voteBlog(blog))
-    dispatch(
-      setNotification(`Like ${blog.title} by ${blog.author}.`, 'success', 5)
-    )
+    dispatch(setNotification(`Like ${blog.title} by ${blog.author}.`, 'success', 5))
   }
 
   return (
     <div>
       <h2>{blog.title}</h2>
       <div>{blog.url}</div>
-      <div>added by {blog.user}</div>
       <div>
         {blog.likes} likes
         <button onClick={like}>like</button>
       </div>
+      <div>added by <Link to={`/users/${blog.user.id}`}>{blog.user.username}</Link></div>
       <h3>comments</h3>
+      {/* {blog.comments.map(comment => <li>{comment}</li>)} */}
     </div>
   )
 }
 
 const Blogs = ({ blogs }) => {
+  if(blogs === undefined || blogs === null) return null
+
   const blogFormRef = useRef()
 
   const blogStyle = {
@@ -97,6 +116,54 @@ const Blogs = ({ blogs }) => {
   )
 }
 
+const User = ({ blogs }) => {
+  const match = useMatch('/users/:id')
+  const userBlogs = match
+    ? blogs.filter(blog => blog.user.id === match.params.id)
+    : null
+
+  if(userBlogs === null) return null
+  
+  return (
+    <div>
+      <h2>{userBlogs[0].user.username}</h2>
+      <h3>added blogs</h3>
+      <ul>
+        {userBlogs.map(blog => 
+          <li key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </li>
+        )}
+      </ul>
+    </div>
+  )
+}
+
+const Users = ({ blogs }) => {
+  const groups = _.countBy(blogs.map(blog => blog.user.id))
+  const users = _.uniqBy(blogs.map(blog => blog.user), 'id')
+
+  return (
+    <div>
+      <h2>Users</h2>
+      <table>
+        <tbody>
+          <tr>
+            <th></th>
+            <th>blogs created</th>
+          </tr>
+          {users.map(user => 
+            <tr key={user.id}>
+              <td><Link to={`/users/${user.id}`}>{user.username}</Link></td>
+              <td>{groups[user.id]}</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 const App = () => {
   const dispatch = useDispatch()
 
@@ -112,11 +179,6 @@ const App = () => {
 
   const user = useSelector(state => state.user)
   const blogs = useSelector(state => state.blogs)
-  const filteredBlogs = blogs.filter(blog => blog.user.username === user.username)
-  const matchBlog = useMatch('/blogs/:id')
-  const blog = matchBlog
-    ? blogs.find(blog => blog.id === Number(matchBlog.params.id))
-    : null
 
   const padding = {
     padding: 5
@@ -136,12 +198,12 @@ const App = () => {
       </div>
 
       <Routes>
-        <Route path="/blogs/:id" element={user ? <Blog blog={blog}/> : <Navigate replace to="/login" />} />
-        <Route path="/blogs" element={user ? <Blogs blogs={blogs} /> : <Navigate replace to="/login" />} />
-        <Route path="/users" element={user ? <UserList /> : <Navigate replace to="/login" />} />
-        {/* <Route path="/users/:id" element={user ? <UserList /> : <Navigate replace to="/login" />} /> */}
+        <Route path="/blogs" element={user ? <Blogs blogs={blogs}/> : <Navigate replace to="/login" />} />
+        <Route path="/blogs/:id" element={user ? <Blog blogs={blogs}/> : <Navigate replace to="/login" />} />
+        <Route path="/users" element={user ? <Users blogs={blogs}/> : <Navigate replace to="/login" />} />
+        <Route path="/users/:id" element={user ? <User blogs={blogs}/> : <Navigate replace to="/login" />} />
         <Route path="/login" element={user ? <Navigate replace to="/" /> : <Login />} />
-        <Route path="/" element={user ? <Blogs blogs={filteredBlogs}/> : <Navigate replace to="/login" />} />
+        <Route path="/" element={user ? <Home /> : <Navigate replace to="/login" />} />
       </Routes>
     </div>
   )
