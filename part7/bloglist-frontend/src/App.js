@@ -1,12 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
-import blogService from './services/blogs'
-import loginService from './services/login'
-import { useDispatch } from 'react-redux'
-import { setNotification } from './reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
+import { initializeUser, login, logout } from './reducers/userReducer'
 import BlogList from './components/BlogList'
 
 const App = () => {
@@ -14,44 +12,19 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUser())
   }, [dispatch])
-
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-
-      setUser(user)
-      blogService.setToken(user.token)
-      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      dispatch(setNotification('wrong username or password', 'error', 5))
-    }
+    const username = event.target.username.value
+    const password = event.target.password.value
+    dispatch(login(username, password))
   }
 
   const handleLogout = async (event) => {
     event.preventDefault()
-    setUser(null)
-    window.localStorage.removeItem('loggedBlogAppUser')
-    dispatch(setNotification('logged out successfully', 'success', 5))
+    dispatch(logout())
   }
 
   const loginForm = () => (
@@ -60,32 +33,19 @@ const App = () => {
       <form onSubmit={handleLogin}>
         <div>
           username
-          <input
-            id="username"
-            type="text"
-            value={username}
-            name="username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
+          <input name="username" />
         </div>
         <div>
           password
-          <input
-            id="password"
-            type="password"
-            value={password}
-            name="password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
+          <input type="password" name="password" />
         </div>
-        <button id="login-button" type="submit">
-          login
-        </button>
+        <button type="submit">login</button>
       </form>
     </div>
   )
 
   const blogFormRef = useRef()
+  const user = useSelector(state => state.user)
 
   if (user === null) {
     return (
