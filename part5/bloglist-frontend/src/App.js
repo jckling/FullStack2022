@@ -60,7 +60,7 @@ const App = () => {
     setUser(null)
     window.localStorage.removeItem('loggedBlogAppUser')
     setTimeout(() => {
-      setErrorMessage('log out timeout')
+      setSuccessMessage('logged out successfully')
     }, 5000)
   }
 

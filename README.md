@@ -12,6 +12,8 @@ JavaScript 阅读材料
 
 React 阅读材料
 - [React 官方文档](https://zh-hans.reactjs.org/docs/getting-started.html)
+- [React Hot Loader](https://gaearon.github.io/react-hot-loader/getstarted/)
 
 其他
 - [QUOTES FOR SOFTWARE ENGINEERS](https://www.comp.nus.edu.sg/~damithch/pages/SE-quotes.htm)
+- [poc-sleepy/full-stack-open-2020](https://github.com/poc-sleepy/full-stack-open-2020)
